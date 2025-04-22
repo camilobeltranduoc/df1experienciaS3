@@ -1,24 +1,22 @@
 package com.duoc.veterinaria.exception;
 
+import com.duoc.veterinaria.model.ResponseWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(FacturaNotFoundException.class)
-    public ResponseEntity<Object> handleFacturaNotFound(FacturaNotFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Not Found");
-        body.put("message", ex.getMessage());
+    public ResponseEntity<ResponseWrapper<String>> notFound(FacturaNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseWrapper<>("ERROR", 0, ex.getMessage()));
+    }
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseWrapper<String>> generic(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseWrapper<>("ERROR", 0, "Error: " + ex.getMessage()));
     }
 }

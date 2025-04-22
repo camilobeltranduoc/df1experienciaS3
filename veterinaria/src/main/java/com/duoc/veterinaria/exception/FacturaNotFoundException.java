@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class FacturaNotFoundException extends RuntimeException {
-    public FacturaNotFoundException(int numero) {
-        super("La factura con número " + numero + " no fue encontrada");
+    public FacturaNotFoundException(Long num) {
+        super("La factura con número " + num + " no fue encontrada");
     }
 }

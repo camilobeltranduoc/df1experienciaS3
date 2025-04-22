@@ -1,22 +1,25 @@
 package com.duoc.envios.exception;
 
-import org.springframework.http.*;
+import com.duoc.envios.model.ResponseWrapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EnvioNotFoundException.class)
-    public ResponseEntity<Object> handleEnvioNotFound(EnvioNotFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Not Found");
-        body.put("message", ex.getMessage());
+    public ResponseEntity<ResponseWrapper<String>> handleNotFound(EnvioNotFoundException ex) {
+        ResponseWrapper<String> body =
+            new ResponseWrapper<>("ERROR", 0, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    /* Otros manejadores genéricos: */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseWrapper<String>> handleGeneric(Exception ex) {
+        ResponseWrapper<String> body =
+            new ResponseWrapper<>("ERROR", 0, "Error inesperado: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }

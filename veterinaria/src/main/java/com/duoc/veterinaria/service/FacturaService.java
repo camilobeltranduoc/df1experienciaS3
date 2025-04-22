@@ -2,43 +2,52 @@ package com.duoc.veterinaria.service;
 
 import com.duoc.veterinaria.exception.FacturaNotFoundException;
 import com.duoc.veterinaria.model.Factura;
+import com.duoc.veterinaria.repository.FacturaRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class FacturaService {
-    private List<Factura> facturas = new ArrayList<>();
 
-    public FacturaService() {
-        facturas.add(new Factura(1, "Camila Soto", Arrays.asList("Consulta", "Vacuna"), 28000, false));
-        facturas.add(new Factura(2, "Luis Rivera", Arrays.asList("Radiografía"), 32000, true));
-        facturas.add(new Factura(3, "Fernanda Díaz", Arrays.asList("Baño", "Desparasitación"), 15000, false));
-        facturas.add(new Factura(4, "Roman Cabrera", Arrays.asList("Consulta", "Desparasitación"), 45000, false));
-        facturas.add(new Factura(5, "Juan Valdez", Arrays.asList("Baño", "Desparasitación"), 15000, false));
+    private final FacturaRepository repo;
+
+    public FacturaService(FacturaRepository repo) {
+        this.repo = repo;
     }
 
     public List<Factura> obtenerTodas() {
-        return facturas;
+        return repo.findAll();
     }
 
-    public Factura obtenerPorNumero(int numero) {
-    return facturas.stream()
-            .filter(f -> f.getNumero() == numero)
-            .findFirst()
-            .orElseThrow(() -> new FacturaNotFoundException(numero));
-}
-
-public String pagarFactura(int numero) {
-    Factura factura = obtenerPorNumero(numero);
-
-    if (factura.isPagada()) {
-        return "La factura ya fue pagada.";
+    public Factura obtenerPorNumero(Long n) {
+        return repo.findById(n)
+                   .orElseThrow(() -> new FacturaNotFoundException(n));
     }
 
-    factura.setPagada(true);
-    return "Factura número " + numero + " pagada correctamente.";
-}
+    public Factura crearFactura(@Valid Factura f) {
+        return repo.save(f);
+    }
+
+    
+    public Factura actualizarFactura(Long n, @Valid Factura datos) {
+        Factura existente = obtenerPorNumero(n);
+        existente.setCliente(datos.getCliente());
+        existente.setTotal(datos.getTotal());
+        existente.setPagada(datos.isPagada());
+        existente.setServicios(datos.getServicios());
+        return repo.save(existente);
+    }
+
+    
+    public void eliminarFactura(Long n) {
+        repo.deleteById(n);
+    }
+
+    public Factura pagarFactura(Long n) {
+        Factura f = obtenerPorNumero(n);
+        f.setPagada(true);
+        return repo.save(f);
+    }
 }

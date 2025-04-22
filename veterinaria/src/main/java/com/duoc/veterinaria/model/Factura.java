@@ -1,27 +1,40 @@
 package com.duoc.veterinaria.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "facturas")
 public class Factura {
-    private int numero;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long numero;
+
+    @NotBlank(message = "El nombre del cliente es obligatorio")
     private String cliente;
-    private List<String> servicios;
+
+    @Min(value = 1, message = "El total debe ser positivo")
     private double total;
+
     private boolean pagada;
 
-    public Factura(int numero, String cliente, List<String> servicios, double total, boolean pagada) {
-        this.numero = numero;
-        this.cliente = cliente;
-        this.servicios = servicios;
-        this.total = total;
-        this.pagada = pagada;
-    }
-
-    public int getNumero() { return numero; }
-    public String getCliente() { return cliente; }
-    public List<String> getServicios() { return servicios; }
-    public double getTotal() { return total; }
-    public boolean isPagada() { return pagada; }
-
-    public void setPagada(boolean pagada) { this.pagada = pagada; }
+    @ElementCollection
+    @CollectionTable(
+            name = "factura_servicios",
+            joinColumns = @JoinColumn(name = "factura_numero")
+    )
+    @Column(name = "servicio")
+    @NotEmpty(message = "Debe haber al menos un servicio")
+    private List<@NotBlank String> servicios;
 }
