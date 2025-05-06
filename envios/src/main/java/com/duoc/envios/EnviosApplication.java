@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class EnviosApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(EnviosApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication app = new SpringApplication(EnviosApplication.class);
+    app.setAdditionalProfiles("cloud");
+    app.run(args);
+  }
 }

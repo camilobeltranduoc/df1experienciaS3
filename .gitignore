@@ -1,0 +1,74 @@
+# ─────────────────────────────
+# Maven / Spring Boot
+# ─────────────────────────────
+target/                     # clases compiladas, JARs, test‑reports
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/*.cmd
+
+# Logs
+*.log
+spring.log
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Lombok del IDE
+lombok.config
+
+# Tests snapshots (JUnit, Mockito, etc.)
+*.snapshot
+
+# Coverage (JaCoCo)
+jacoco.exec
+target/site/jacoco/
+
+# Docker build cache (si usas BuildKit mounts)
+**/build/
+
+# Wallet y secretos
+envios/wallet/
+veterinaria/wallet/
+wallet/                     # Oracle Cloud wallet (copias en Dockerfile)
+*.jks
+*.pem
+*.p12
+*.sso
+
+# Postman env/working files (opcional)
+.postman/
+
+# Generated Postman collections (si los re‑exportas frecuentemente)
+*.postman_collection.json
+
+# Node / Front (en caso de tener frontend dentro)
+node_modules/
+
+# OS-specific
+ehthumbs.db
+Desktop.ini
+
+# Backup / temp
+*.tmp
+*.bak
+*.old
+*.orig
+*~

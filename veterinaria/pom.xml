@@ -4,67 +4,93 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <!-- ──────────  POM / BOM  ────────── -->
   <modelVersion>4.0.0</modelVersion>
 
-  <!--  ─────────────  PARENT SPRING BOOT  ─────────────  -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.0-SNAPSHOT</version>
+    <version>3.2.6</version>
+    <relativePath/>
   </parent>
 
+  <!-- ──────────  Identidad  ────────── -->
   <groupId>com.duoc</groupId>
   <artifactId>veterinaria</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>veterinaria</name>
-  <description>API CRUD de facturas — Spring Boot + SQLite</description>
+  <description>Microservicio de gestión de facturas veterinarias</description>
+  <packaging>jar</packaging>
 
+  <!-- ──────────  Propiedades  ────────── -->
   <properties>
     <java.version>21</java.version>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <!--  ─────────────  DEPENDENCIAS  ─────────────  -->
+  <!-- ──────────  Dependencias  ────────── -->
   <dependencies>
-
-    <!-- Web + JSON -->
+    <!-- Spring Boot -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
-    <!-- Validación Bean Validation -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-validation</artifactId>
-    </dependency>
-
-    <!-- Spring Data JPA / Hibernate -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
-
-    <!-- Dialecto adicional para SQLite -->
     <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-community-dialects</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
     </dependency>
 
-    <!-- Driver JDBC SQLite -->
+    <!-- Oracle Cloud (perfil cloud) -->
+    <dependency>
+      <groupId>com.oracle.database.jdbc</groupId>
+      <artifactId>ojdbc8</artifactId>
+      <version>21.11.0.0</version>          <!-- ← antes 19.3.0.0 -->
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.database.security</groupId>
+      <artifactId>oraclepki</artifactId>
+      <version>21.11.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.database.security</groupId>
+      <artifactId>osdt_core</artifactId>
+      <version>21.11.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.database.security</groupId>
+      <artifactId>osdt_cert</artifactId>
+      <version>21.11.0.0</version>
+    </dependency>
+
+    <!-- SQLite (desarrollo local) -->
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.45.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-community-dialects</artifactId>
+      <version>6.2.6.Final</version>
     </dependency>
 
     <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
 
-    <!-- Devtools (opcional) -->
+    <!-- DevTools (hot reload en dev) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -72,69 +98,60 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Tests -->
+    <!-- ──────────  TEST  ────────── -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
-  <!--  ─────────────  BUILD & PLUGINS  ─────────────  -->
+  <!-- ──────────  Build plugins  ────────── -->
   <build>
     <plugins>
-
       <!-- Spring Boot -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-
-      <!-- Compiler plugin para Java 21 -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <release>${java.version}</release>
-          <annotationProcessorPaths>
-            <path>
+          <excludes>
+            <exclude>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
-            </path>
-          </annotationProcessorPaths>
+            </exclude>
+          </excludes>
         </configuration>
       </plugin>
 
+      <!-- Cobertura JaCoCo -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.10</version>
+        <executions>
+          <execution>
+            <goals><goal>prepare-agent</goal></goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>verify</phase>
+            <goals><goal>report</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-
-  <!--  ─────────  REPOSITORIOS PARA SNAPSHOTS (ya tenías) ─────────  -->
-  <repositories>
-    <repository>
-      <id>spring-milestones</id>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository>
-      <id>spring-snapshots</id>
-      <url>https://repo.spring.io/snapshot</url>
-      <releases><enabled>false</enabled></releases>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>spring-milestones</id>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots><enabled>false</enabled></snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>spring-snapshots</id>
-      <url>https://repo.spring.io/snapshot</url>
-      <releases><enabled>false</enabled></releases>
-    </pluginRepository>
-  </pluginRepositories>
 
 </project>
