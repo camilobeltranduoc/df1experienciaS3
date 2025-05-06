@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "Veterinaria API",
+    "_postman_id": "4bdb2fd4-847b-4009-999c-b46475a5cff4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colecci\u00f3n Postman para probar el microservicio Veterinaria (Facturas). Usa la variable {{baseUrl}} para cambiar entre local y cloud."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Listar todas las facturas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/facturas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Crear factura",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"Pedro\",\n  \"total\": 30000,\n  \"pagada\": false,\n  \"servicios\": [\n    \"Consulta\",\n    \"Vacuna\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/facturas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Obtener factura por n\u00famero",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/facturas/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Actualizar factura completa",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"Pedro\",\n  \"total\": 32000,\n  \"pagada\": true,\n  \"servicios\": [\n    \"Consulta\",\n    \"Vacuna\",\n    \"Desparasitaci\\u00f3n\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/facturas/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Pagar factura",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/facturas/1/pagar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas",
+            "1",
+            "pagar"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Eliminar factura",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/facturas/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "facturas",
+            "1"
+          ]
+        }
+      }
+    }
+  ]
+}

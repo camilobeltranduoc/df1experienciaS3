@@ -1,0 +1,120 @@
+{
+  "info": {
+    "name": "Envios API",
+    "_postman_id": "821aef2e-b47c-4bc7-b287-b9363c777d73",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colecci\u00f3n para probar el microservicio Envios (Spring Boot)."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Obtener todos los env\u00edos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/envios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "envios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar env\u00edo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"destinatario\": \"Ana\",\n  \"paisDestino\": \"Chile\",\n  \"ubicacionActual\": \"Santiago\",\n  \"estado\": \"PENDIENTE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/envios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "envios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener env\u00edo por ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/envios/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "envios",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar estado y ubicaci\u00f3n",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/envios/1?estado=ENTREGADO&ubicacion=Lima",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "envios",
+            "1"
+          ],
+          "query": [
+            {
+              "key": "estado",
+              "value": "ENTREGADO"
+            },
+            {
+              "key": "ubicacion",
+              "value": "Lima"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar env\u00edo",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/envios/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "envios",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -53,12 +53,6 @@ wallet/                     # Oracle Cloud wallet (copias en Dockerfile)
 *.p12
 *.sso
 
-# Postman env/working files (opcional)
-.postman/
-
-# Generated Postman collections (si los re‑exportas frecuentemente)
-*.postman_collection.json
-
 # Node / Front (en caso de tener frontend dentro)
 node_modules/
 
